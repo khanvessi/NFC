@@ -203,11 +203,11 @@ export const createEvent = eventData => {
         } else {
           let temp = store.getState().event.eventData;
           let temp1 = response?.data?.data;
-          console.log('--- RESULT FROM CREATING EVENT' + JSON.stringify(temp));
+          // console.log('--- RESULT FROM CREATING EVENT' + JSON.stringify(temp));
 
-          console.log('--- RESULT FROM CREATING EVENT 22' + temp1);
+          // console.log('--- RESULT FROM CREATING EVENT 22' + temp1);
 
-          console.log('--- COMBINED RESULT FROM CREATING EVENT 2222' + temp);
+          // console.log('--- COMBINED RESULT FROM CREATING EVENT 2222' + temp);
 
           temp.push(temp1);
 
