@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "683978316236",
+    "project_id": "nfc-r-event",
+    "storage_bucket": "nfc-r-event.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683978316236:android:dfd6ff0e964034b7b66569",
+        "android_client_info": {
+          "package_name": "com.nfc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683978316236-ne7vaf1avglmtvuh54jtk1or82bar3rb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKY1ytTWDvlI0eIx8sIFpVrB6zhMsj38E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683978316236-ne7vaf1avglmtvuh54jtk1or82bar3rb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
