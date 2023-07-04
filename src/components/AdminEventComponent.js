@@ -1,7 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux';
+import {deleteEvent} from '../Redux/Action/EventsActions';
 
 const COLORS = {
   white: '#fff',
@@ -12,7 +14,7 @@ const COLORS = {
   cardColor: '#FAF9FF',
 };
 
-const AdminEventComponent = ({event}) => {
+const AdminEventComponent = ({event, ...props}) => {
   const handleFeedbackClick = () => {
     console.warn('you clicked me!');
   };
@@ -20,6 +22,7 @@ const AdminEventComponent = ({event}) => {
   // Extracting data from the event prop
   const {
     eventName,
+    _id,
     description,
     startTime,
     endTime,
@@ -29,6 +32,10 @@ const AdminEventComponent = ({event}) => {
     summary,
   } = event;
 
+  const data = {
+    eventId: _id,
+  };
+
   const formattedStartTime = formatTime(startTime);
 
   const formattedEndTime = formatTime(endTime);
@@ -36,7 +43,7 @@ const AdminEventComponent = ({event}) => {
   const formattedStartDate = formatDate(startDate);
   const formattedEndDate = formatDate(endDate);
 
-  console.log('---- SUMMARY --- ', summary[0].totalUser);
+  // console.log('---- SUMMARY --- ', summary[0].totalUser);
 
   function formatTime(time) {
     const date = new Date(time);
@@ -52,15 +59,45 @@ const AdminEventComponent = ({event}) => {
 
   return (
     <View style={styles.card}>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 17,
-          marginTop: 10,
-          color: 'blue',
-        }}>
-        {eventName}
-      </Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 17,
+            marginTop: 10,
+            marginRight: 4,
+            color: 'blue',
+          }}>
+          {eventName}
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert(
+              'Confirmation',
+              'Are you sure you want to delete this event?',
+              [
+                {
+                  text: 'No',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Yes',
+                  style: 'destructive',
+                  onPress: () => props.deleteEvent(data),
+                },
+              ],
+            );
+          }}>
+          <FontAwesome
+            name="trash"
+            size={14}
+            style={{
+              fontWeight: 'bold',
+              marginTop: 10,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
       <Text style={{marginTop: 10}}>{description}</Text>
 
       <View
@@ -91,17 +128,29 @@ const AdminEventComponent = ({event}) => {
       <View style={styles.btnContainer}>
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryLabel}>Admin</Text>
-          <Text style={styles.summaryValue}>{summary[0].Admin}</Text>
+          <Text style={styles.summaryValue}>
+            {summary && summary[0] && summary[0].Admin !== undefined
+              ? summary[0].Admin
+              : 0}
+          </Text>
         </View>
 
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryLabel}>Attendees</Text>
-          <Text style={styles.summaryValue}>{summary[0].Attendees}</Text>
+          <Text style={styles.summaryValue}>
+            {summary && summary[0] && summary[0].Admin !== undefined
+              ? summary[0].Attendees
+              : 0}
+          </Text>
         </View>
 
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryLabel}>Total</Text>
-          <Text style={styles.summaryValue}>{summary[0].totalUser}</Text>
+          <Text style={styles.summaryValue}>
+            {summary && summary[0] && summary[0].Admin !== undefined
+              ? summary[0].totalUser
+              : 0}
+          </Text>
         </View>
       </View>
 
@@ -201,4 +250,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminEventComponent;
+const mapStateToProps = ({}) => ({});
+
+export default connect(mapStateToProps, {
+  deleteEvent,
+})(AdminEventComponent);

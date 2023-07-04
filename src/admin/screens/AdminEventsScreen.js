@@ -25,7 +25,6 @@ import {
 import {requestUserPermission} from '../utils/pushnotification_helper';
 import AdminEventComponent from '../../components/AdminEventComponent';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {MaterialCommunityIcons} from 'react-native-vector-icons';
 // import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -128,28 +127,31 @@ const AdminEventsScreen = ({navigation, ...props}) => {
 
   const handleSave = async () => {
     console.log('===DATES===', startDate, endDate, startTime, endTime);
-    const formattedStartDate = formatDateForAPI(startDate);
-    const formattedEndDate = formatDateForAPI(endDate);
-    const formattedStartTime = formatTimeForAPI(startTime);
-    const formattedEndTime = formatTimeForAPI(endTime);
+    // const formattedStartDate = formatDateForAPI(startDate);
+    // const formattedEndDate = formatDateForAPI(endDate);
+    // const formattedStartTime = formatTimeForAPI(startTime);
+    // const formattedEndTime = formatTimeForAPI(endTime);
     // Perform save logic here
     const createEventData = {
       eventName,
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-      startTime: formattedStartTime,
+      // startDate: formattedStartDate,
+      startDate: '2022-10-30T19:00:00.000Z',
+      // endDate: formattedEndDate,
+      endDate: '2022-10-30T19:00:00.000Z',
+      // startTime: formattedStartTime,
+      startTime: '1899-12-31T09:00:00Z',
       parentEventId: '',
-      endTime: formattedEndTime,
+      // endTime: formattedEndTime,
+      endTime: '1899-12-31T09:00:00Z',
       timezone: 'Africa/Bissua',
-      address,
-      description,
+      address: 'adfad',
+      description: 'adfadf',
     };
 
     console.log('---- IN EVENTSCREEN-- ', createEventData);
 
-    const res = await props.createEvent(createEventData);
+    props.createEvent(createEventData);
 
-    console.log('RES=>>>', res);
     setModalVisible(false);
   };
 
@@ -166,7 +168,7 @@ const AdminEventsScreen = ({navigation, ...props}) => {
 
   useEffect(() => {
     console.warn('##### EVENT DATA :');
-  }, [props.eventData]);
+  }, [eventData]);
 
   useEffect(() => {
     props.login();

@@ -5,7 +5,6 @@ import {getToken, getChannelId} from '../../Helper/helper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CHANGE_LOADER, SHOW_EVENTS_DETAIL, SIGN_IN, SIGN_UP} from '../Types';
 import store from '../../Store';
-
 export const fetchUserData = () => {
   return async dispatch => {
     try {
@@ -118,16 +117,16 @@ export const createUser = () => {
 };
 
 export const fetchEventData = () => {
-  console.log('CALLED FETCHEVENTDATA AGAIN');
+  // console.log('CALLED FETCHEVENTDATA AGAIN');
 
   var data = {
     page: 1,
     limit: 100,
   };
   return async dispatch => {
-    console.log('CALLED FETCHEVENTDATA AGAIN AGAIN');
+    // console.log('CALLED FETCHEVENTDATA AGAIN AGAIN');
     let token = await getToken();
-    console.log('STORED TOKEN -> ', token);
+    // console.log('STORED TOKEN -> ', token);
 
     try {
       var requestOptions = {
@@ -146,15 +145,14 @@ export const fetchEventData = () => {
         response.json().then(data => ({status: response.status, data})),
       );
 
-      console.log('===== EVENT DATA ===== : ', eventData);
+      // console.log('===== EVENT DATA ===== : ', eventData);
       if (eventData.status >= 200) {
         const dataArray = eventData.data.data.data;
-        console.log(dataArray);
+        // console.log(dataArray);
 
         if (eventData?.success == false) {
           console.log('signup error');
         } else {
-          console.warn('fetching event data');
           dispatch({
             type: SHOW_EVENTS_DETAIL,
             payload: eventData?.data?.data?.data,
@@ -209,9 +207,75 @@ export const createEvent = eventData => {
 
           console.log('--- COMBINED RESULT FROM CREATING EVENT 2222' + temp);
 
-          temp.push(temp1);
+          temp.unshift(temp1);
 
-          // console.log('Updated Array:::', temp);
+          console.log('Updated Array:::', temp);
+
+          const parsedData = JSON.parse(temp);
+
+          // console.log(
+          //   '--- COMBINED RESULT FROM CREATING EVENT 2222' + dataArray,
+          // );
+          dispatch({
+            type: SHOW_EVENTS_DETAIL,
+            payload: parsedData,
+          });
+        }
+      } else {
+        // onOtherStatus(eventData, dispatch);
+        console.warn('STATUS WAS NOT 200 OR ABOVE');
+      }
+    } catch (error) {
+      console.log(error);
+      // console.warn(error)
+    }
+  };
+};
+
+export const deleteEvent = eventData => {
+  return async dispatch => {
+    let token = await getToken();
+
+    let channelId = await AsyncStorage.getItem('channelId');
+    try {
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+          channelId: channelId,
+        },
+        body: JSON.stringify(eventData),
+      };
+
+      let response = await fetch(
+        baseUrl + 'event/delete-event',
+        requestOptions,
+      ).then(response =>
+        response.json().then(data => ({status: response.status, data})),
+      );
+
+      console.log('===== DELETED EVENT DATA ===== : ', response);
+      if (response.status >= 200) {
+        if (response?.success == false) {
+          console.log('create event error!');
+        } else {
+          console.log('event deleted');
+
+          let temp = store.getState().event.eventData;
+          let deletedEvent = response?.data?.data;
+          temp = temp.filter(event => event._id !== deletedEvent._id);
+          // console.log('--- RESULT FROM CREATING EVENT' + JSON.stringify(temp));
+
+          // console.log('--- RESULT FROM CREATING EVENT 22' + temp1);
+
+          // console.log('--- COMBINED RESULT FROM CREATING EVENT 2222' + temp);
+
+          // temp.unshift(temp1);
+
+          console.log('Updated Array:::', temp);
+
+          // const parsedData = JSON.parse(temp);
 
           // console.log(
           //   '--- COMBINED RESULT FROM CREATING EVENT 2222' + dataArray,
